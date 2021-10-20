@@ -1,24 +1,12 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Ruby version: 2.7.4p191
+Rails version: 6.1.4.1
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+Simply run `$ bundle install` to install and `$ rails server` to get the application running at http://localhost:3000.
 
-* System dependencies
+## Tests
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To run the rspec tests, simply run `$ rspec` from the command line.

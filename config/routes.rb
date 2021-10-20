@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  get 'pages/table'
-  get 'pages/local'
-  get 'pages/compare'
-  root 'application#hello'
+  get 'table', to: 'pages#table'
+  get 'local', to: 'pages#local'
+  get 'compare', to: 'pages#compare'
+  root 'pages#table'
 end
