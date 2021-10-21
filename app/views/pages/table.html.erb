@@ -1,4 +1,57 @@
-<h1>Crypto Table</h1>
-<p>Select the currencies and data that you require.</p>
-<p>(This is the answer to requirements 1 and 2)</p>
-<a href="#" class="btn btn-lg btn-primary">Sign up now!</a>
+<h1>Get latest crypto data</h1>
+
+<p>Get any available data for any cryptocurrencies available via the Nomics API</p>
+
+<%= form_with url: "/table", method: :get do |form| %>
+  <div class="form-check">
+	Crypto currency ticket symbols, comma separated (e.g. BTC, ETH):
+    <%= form.text_field :crypto_currencies, class: "form-check-input", value: params[:crypto_currencies] %>
+	<p>Full List here: https://github.com/razorsyntax/apifixer/blob/master/api-fixer.json</p>
+  
+  </div>
+  <br>
+	<div class="form-check">
+    Data required (deselect to retrieve all):
+    <% @available_attributes.each do |attiribute| %>
+  	  <%= form.check_box attiribute, 
+        class: "form-check-input",
+        id: attiribute,
+        checked: params[attiribute] && params[attiribute] != "0"
+      %>
+  	  <label class="form-check-label" for="<%= attiribute %>">
+  	    <%= attiribute %>
+  	  </label>
+    <% end %>
+	</div>
+  <br>
+	<button class="btn btn-primary">Get data</button>
+  <br>
+
+<% end %>
+
+<% if @error %>
+  <div class="alert alert-danger" role="alert">
+    <%= @error %>
+  </div>
+<% end %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <% @data.each_index do |i| %>
+        <th scope="col"><%= @data[i]['id'].to_s %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% for attribute in @available_attributes %>
+      <tr>
+        <th scope="row"><%= attribute %></th>
+        <% @data.each_index do |i| %>
+          <td><%= @data[i][attribute] %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

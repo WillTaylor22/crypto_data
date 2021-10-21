@@ -1,14 +1,16 @@
 source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:github) { |repo| "https://github.com/#{repo}.git" } # Enforces HTTPS for bundler
 
-gem 'rails',      '6.1.4.1'
-gem 'puma',       '5.3.1'
-gem 'sass-rails', '6.0.0'
-gem 'webpacker',  '5.4.0'
-gem 'turbolinks', '5.2.1'
-gem 'jbuilder',   '2.10.0'
-gem 'bootsnap',   '1.7.2', require: false
+gem 'rails',          '6.1.4.1'
+gem 'puma',           '5.3.1'
+gem 'sass-rails',     '6.0.0'
+gem 'webpacker',      '5.4.0'
+gem 'turbolinks',     '5.2.1'
+gem 'jbuilder',       '2.10.0'
+gem 'bootsnap',       '1.7.2', require: false
 gem 'bootstrap-sass', '3.4.1'
+gem 'figaro',         '1.2.0'
+gem 'http',           '5.0.4'
 
 group :development, :test do
   gem 'sqlite3', '1.4.2'
@@ -23,12 +25,13 @@ group :development do
 end
 
 group :test do
-  gem 'capybara',                 '3.35.3'
-  gem 'selenium-webdriver',       '3.142.7'
-  gem 'webdrivers',               '4.6.0'
-  gem 'guard',                    '2.16.2'
-  gem 'rspec',                    '3.10.0'
-  gem 'guard-rspec',              '4.7.3'
+  gem 'capybara',            '3.35.3'
+  gem 'selenium-webdriver',  '3.142.7'
+  gem 'webdrivers',          '4.6.0'
+  gem 'guard',               '2.16.2'
+  gem 'rspec',               '3.10.0'
+  gem 'guard-rspec',         '4.7.3'
+  gem 'webmock',             '3.14.0'
 end
 
 group :production do
