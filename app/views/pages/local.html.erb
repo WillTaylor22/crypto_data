@@ -3,13 +3,8 @@
 <p>Find the current price of various cryptocurrencies in various fiat currencies</p>
 
 <form>
-	Crypto: 
-	<select class="form-select" aria-label="Default select example">
-	  <option selected>Open this select menu</option>
-	  <option value="1">One</option>
-	  <option value="2">Two</option>
-	  <option value="3">Three</option>
-	</select>
+	Crypto ticker (e.g. BTC): 
+  <%= form.text_field :crypto_currencies, class: "form-check-input", value: params[:crypto_currency] %>
 
 	Fiat currency:
 	<select class="form-select" aria-label="Default select example">

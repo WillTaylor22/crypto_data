@@ -1,25 +1,24 @@
-<h1>Get latest crypto data</h1>
-
-<p>Get any available data for any cryptocurrencies available via the Nomics API</p>
+<h1>Nomics API Data</h1>
 
 <%= form_with url: "/table", method: :get do |form| %>
   <div class="form-check">
-	Crypto currency ticket symbols, comma separated (e.g. BTC, ETH):
+	Enter the ticker symbols here, comma separated (e.g. BTC, ETH):
     <%= form.text_field :crypto_currencies, class: "form-check-input", value: params[:crypto_currencies] %>
-	<p>Full List here: https://github.com/razorsyntax/apifixer/blob/master/api-fixer.json</p>
+	<p><a href="https://github.com/razorsyntax/apifixer/blob/master/api-fixer.json">Full List here</a></p>
   
   </div>
   <br>
 	<div class="form-check">
     Data required (deselect to retrieve all):
-    <% @available_attributes.each do |attiribute| %>
-  	  <%= form.check_box attiribute, 
+    <br>
+    <% @available_attributes.each do |attribute| %>
+  	  <%= form.check_box attribute, 
         class: "form-check-input",
-        id: attiribute,
-        checked: params[attiribute] && params[attiribute] != "0"
+        id: attribute,
+        checked: params[attribute] && params[attribute] != "0"
       %>
-  	  <label class="form-check-label" for="<%= attiribute %>">
-  	    <%= attiribute %>
+  	  <label class="form-check-label" for="<%= attribute %>">
+  	    <%= attribute %>
   	  </label>
     <% end %>
 	</div>
@@ -45,7 +44,7 @@
     </tr>
   </thead>
   <tbody>
-    <% for attribute in @available_attributes %>
+    <% for attribute in @show_attributes.excluding('id') %>
       <tr>
         <th scope="row"><%= attribute %></th>
         <% @data.each_index do |i| %>
