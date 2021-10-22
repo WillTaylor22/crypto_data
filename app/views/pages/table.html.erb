@@ -28,11 +28,7 @@
 
 <% end %>
 
-<% if @error %>
-  <div class="alert alert-danger" role="alert">
-    <%= @error %>
-  </div>
-<% end %>
+<%= render 'errors' %>
 
 <table class="table">
   <thead>

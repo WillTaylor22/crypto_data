@@ -12,4 +12,6 @@ Then run `$ bundle install` to install and `$ rails server` to get the applicati
 
 ## Tests
 
+First run `$ rake db:test:prepare` to load the test database.
+
 To run the rspec tests, simply run `$ rspec` from the command line.

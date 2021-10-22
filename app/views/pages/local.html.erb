@@ -2,25 +2,17 @@
 
 <p>Find the current price of various cryptocurrencies in various fiat currencies</p>
 
-<form>
+<%= form_with url: "/local", method: :get do |form| %>
 	Crypto ticker (e.g. BTC): 
-  <%= form.text_field :crypto_currencies, class: "form-check-input", value: params[:crypto_currency] %>
+  <%= form.text_field :crypto, class: "form-check-input", value: params[:crypto] %>
 
-	Fiat currency:
-	<select class="form-select" aria-label="Default select example">
-	  <option selected>Open this select menu</option>
-	  <option value="1">One</option>
-	  <option value="2">Two</option>
-	  <option value="3">Three</option>
-	</select>
-
+	Fiat currency (e.g. USD):
+  <%= form.text_field :fiat, class: "form-check-input", value: params[:fiat] %>
 
 	<button class="btn btn-primary">Get price</button>
 
-</form>
+<% end %>
 
-<div class="alert alert-danger" role="alert">
-  A simple danger alert—check it out!
-</div>
+<%= render 'errors' %>
 
-<h2>1 ETH = USD 20</h2>
+<h2>1 ETH = 20</h2>

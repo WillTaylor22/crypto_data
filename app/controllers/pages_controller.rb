@@ -12,9 +12,19 @@ class PagesController < ApplicationController
   end
 
   def local
+    # # default currency to BTC to avoid long hanging requests.
+    # # could add front-end error handling
+    # @error, @data = TickerData.new.get({ids: local_params || 'BTC'})
+    # error_exhange_rates, @data = ExchangeRates.new.get(params[:fiat])
+
+    # # Display one of the errors if present. In the event of two errors,
+    # # the root cause will be the same in this simple scenario.
+    # @error ||= error_exhange_rates
   end
 
   def compare
+    
+    @error
   end
 end
 
@@ -22,6 +32,14 @@ private
   
   def ticker_params
     params.permit(:crypto_currencies, available_attributes.map(&:to_sym))
+  end
+
+  def local_params
+    params.permit(:crypto, :fiat)
+  end
+
+  def compare_params
+    params.permit(:base_crypto, :comparison_crypto)
   end
 
   def build_ticker_params
