@@ -3,7 +3,7 @@
 <%= form_with url: "/table", method: :get do |form| %>
   <div class="form-check">
 	Enter the ticker symbols here, comma separated (e.g. BTC, ETH):
-    <%= form.text_field :crypto_currencies, class: "form-check-input", value: params[:crypto_currencies] %>
+    <%= form.text_field :currencies, class: "form-check-input", value: params[:currencies] %>
 	<p><a href="https://github.com/razorsyntax/apifixer/blob/master/api-fixer.json">Full List here</a></p>
   
   </div>

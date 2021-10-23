@@ -7,19 +7,6 @@ RSpec.describe PagesController do
 		allow(@controller).to receive(:params).and_return(params)
 	end
 
-	describe "build_ticker_params" do
-		it "returns BTC only when params are blank" do
-		    expect(@controller.send(:build_ticker_params)).to eq({ids: 'BTC'})
-		end
-
-		it "returns the currencies entered when params present" do
-			params = ActionController::Parameters.new({ crypto_currencies: 'ETH' })
-			allow(@controller).to receive(:params).and_return(params)
-
-		    expect(@controller.send(:build_ticker_params)).to eq({ids: 'ETH'})
-		end
-	end
-
 	describe "filter_enabled?" do
 		it "returns false when no filters selected" do
 			expect(@controller.send(:filter_enabled?)).to be false

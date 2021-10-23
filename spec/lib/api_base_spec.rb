@@ -10,20 +10,20 @@ RSpec.describe ApiBase do
 
   it "Endpoint actually works" do
     WebMock.allow_net_connect!
-    VALID_URI = "https://api.nomics.com/v1/currencies/ticker?\
+    valid_uri = "https://api.nomics.com/v1/currencies/ticker?\
 key=#{Figaro.env.NOMICS_API_KEY}&ids=BTC"
 
 
-    expect(HTTP.get(VALID_URI).status).to eq 200
+    expect(HTTP.get(valid_uri).status).to eq 200
   end
 
   it "gets data" do
-    VALID_RESPONSE = "[{\"id\":\"BTC\",\"name\":\"Bitcoin\",\"price\":\"57123.28385027\"}]"
+    valid_response = "[{\"id\":\"BTC\",\"name\":\"Bitcoin\",\"price\":\"57123.28385027\"}]"
 
     stub_request(:any, /api.nomics.com/).
-      to_return(body: VALID_RESPONSE)
+      to_return(body: valid_response)
 
-    expect(ApiBase.request('/currencies/ticker', @params)).to eq([nil, JSON.parse(VALID_RESPONSE)])
+    expect(ApiBase.request('/currencies/ticker', @params)).to eq([nil, JSON.parse(valid_response)])
   end
 
   it "gives an error when not connected to the internet" do
@@ -48,10 +48,10 @@ key=#{Figaro.env.NOMICS_API_KEY}&ids=BTC"
   end
 
   it "returns an error when the response is not valid JSON" do
-    INVALID_RESPONSE = ""
+    invalid_response = ""
 
     stub_request(:any, /api.nomics.com/).
-      to_return(body: INVALID_RESPONSE)
+      to_return(body: invalid_response)
 
     expect(ApiBase.request('/currencies/ticker', @params)).to eq(['Nomics Api response unreadable', nil])
   end
