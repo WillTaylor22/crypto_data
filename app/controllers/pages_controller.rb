@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
 
   def table
-    @error, @data = TickerData.new.get(build_ticker_params)
+    @error, @data = Ticker.new.get(build_ticker_params)
     @available_attributes = available_attributes
     if filter_enabled?
       @show_attributes = selected_attributes
@@ -23,9 +23,12 @@ class PagesController < ApplicationController
   end
 
   def compare
-    
-    @error
-  end
+    if do_comparison?
+        @error, @comparison = Calculator.compare(
+          params[:base_crypto],
+          params[:comparison_crypto])
+      end
+    end
 end
 
 private
@@ -40,6 +43,10 @@ private
 
   def compare_params
     params.permit(:base_crypto, :comparison_crypto)
+  end
+
+  def do_comparison?
+    params[:base_crypto].present?
   end
 
   def build_ticker_params

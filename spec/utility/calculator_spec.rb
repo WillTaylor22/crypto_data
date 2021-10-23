@@ -1,4 +1,4 @@
-RSpec.describe Calculator, focus: true do
+RSpec.describe Calculator do
   
 	describe 'compare' do
 		before(:all) do
@@ -42,7 +42,14 @@ RSpec.describe Calculator, focus: true do
 				'The price of BTC was not available', nil]
 
 			# ...zero
-    	eth_response = "[{\"id\":\"BTC\",\"price\":\"0\"}]"
+    	btc_response = "[{\"id\":\"BTC\",\"price\":\"0\"}]"
+			stub_request(:any, /BTC/).to_return(body: btc_response)
+			expect(Calculator.compare('BTC', 'ETH')).to eq [
+				'The price of BTC was not available', nil]
+
+			# ...blank response
+    	btc_response = "[]"
+			stub_request(:any, /BTC/).to_return(body: btc_response)
 			expect(Calculator.compare('BTC', 'ETH')).to eq [
 				'The price of BTC was not available', nil]
 

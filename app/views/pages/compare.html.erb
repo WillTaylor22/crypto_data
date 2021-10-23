@@ -1,31 +1,13 @@
-<h1>Compare crypto currencies</h1>
+<h1>Compare Two Crypto Currencies</h1>
+<br>
+<%= form_with url: "/compare", method: :get do |form| %>
+	How many 
+	<%= select_tag 'comparison_crypto', options_from_collection_for_select(Crypto.order(:ticker), 'ticker', 'ticker', params[:comparison_crypto]), class: "form-select" %>
+	can buy one 
+	<%= select_tag 'base_crypto', options_from_collection_for_select(Crypto.order(:ticker), 'ticker', 'ticker', params[:base_crypto]), class: "form-select" %> ?
+	<button class="btn btn-primary btn-sm">Get exchange rate</button>
+<% end %>
 
-<p>Compare the price of two crypto currencies</p>
+<%= render 'errors' %>
 
-<form>
-	Crypto 1: 
-	<select class="form-select" aria-label="Default select example">
-	  <option selected>Open this select menu</option>
-	  <option value="1">One</option>
-	  <option value="2">Two</option>
-	  <option value="3">Three</option>
-	</select>
-
-	Crypto 2: 
-	<select class="form-select" aria-label="Default select example">
-	  <option selected>Open this select menu</option>
-	  <option value="1">One</option>
-	  <option value="2">Two</option>
-	  <option value="3">Three</option>
-	</select>
-
-
-	<button class="btn btn-primary">Get exchange rate</button>
-
-</form>
-
-<div class="alert alert-danger" role="alert">
-  A simple danger alert—check it out!
-</div>
-
-<h2>1 ETH = USD 20</h2>
+<h4><%= @comparison %></h4>

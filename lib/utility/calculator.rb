@@ -28,14 +28,14 @@ class Calculator
 		error, base_data = Ticker.fetch({ ids: base_crypto })
 		return error, nil if error 
 
+		return PRICE_UNAVAILABLE(base_crypto), nil if invalid_price?(base_data)
 		base_price = base_data[0]['price'].to_f
-		return PRICE_UNAVAILABLE(base_crypto), nil if invalid_price?(base_price)
 
 		error, comparison_data = Ticker.fetch({ ids: comparison_crypto })
 		return error, nil if error 
 
+		return PRICE_UNAVAILABLE(comparison_crypto), nil if invalid_price?(comparison_data)
 		comparison_price = comparison_data[0]['price'].to_f
-		return PRICE_UNAVAILABLE(comparison_crypto), nil if invalid_price?(comparison_price)
 
 
 		ratio = (base_price/comparison_price).round(6)
@@ -43,7 +43,9 @@ class Calculator
 		return nil, comparison_string_for(base_crypto, comparison_crypto, ratio)
 	end
 
-	def self.invalid_price?(price)
+	def self.invalid_price?(data)
+		return true if data.blank?
+		price = data[0]['price'].to_f
 		return price.blank? || price.to_f == 0
 	end
 
