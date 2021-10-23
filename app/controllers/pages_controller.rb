@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
 
   def table
-    @error, @data = Ticker.new.get(build_ticker_params)
+    @error, @data = Ticker.fetch(build_ticker_params)
     @available_attributes = available_attributes
     if filter_enabled?
       @show_attributes = selected_attributes
@@ -12,24 +12,18 @@ class PagesController < ApplicationController
   end
 
   def local
-    # # default currency to BTC to avoid long hanging requests.
-    # # could add front-end error handling
-    # @error, @data = TickerData.new.get({ids: local_params || 'BTC'})
-    # error_exhange_rates, @data = ExchangeRates.new.get(params[:fiat])
-
-    # # Display one of the errors if present. In the event of two errors,
-    # # the root cause will be the same in this simple scenario.
-    # @error ||= error_exhange_rates
+    return if fresh_local_page?
+    @error, @price = Calculator.price_of(
+      params[:crypto],
+      params[:fiat])
   end
 
   def compare
-    if do_comparison?
-        @error, @comparison = Calculator.compare(
-          params[:base_crypto],
-          params[:comparison_crypto])
-      end
-    end
-end
+    return if fresh_compare_page?
+    @error, @comparison = Calculator.compare(
+      params[:base_crypto],
+      params[:comparison_crypto])
+  end
 
 private
   
@@ -45,8 +39,12 @@ private
     params.permit(:base_crypto, :comparison_crypto)
   end
 
-  def do_comparison?
-    params[:base_crypto].present?
+  def fresh_local_page?
+    params[:crypto].blank?
+  end
+
+  def fresh_compare_page?
+    params[:base_crypto].blank?
   end
 
   def build_ticker_params
@@ -111,3 +109,5 @@ private
     "high",
     "high_timestamp"] 
   end
+
+end

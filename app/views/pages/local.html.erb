@@ -1,18 +1,13 @@
-<h1>Crypto to fiat</h1>
-
-<p>Find the current price of various cryptocurrencies in various fiat currencies</p>
-
+<h1>Crypto Price In Fiat Currencies</h1>
+<br>
 <%= form_with url: "/local", method: :get do |form| %>
-	Crypto ticker (e.g. BTC): 
-  <%= form.text_field :crypto, class: "form-check-input", value: params[:crypto] %>
-
-	Fiat currency (e.g. USD):
-  <%= form.text_field :fiat, class: "form-check-input", value: params[:fiat] %>
-
-	<button class="btn btn-primary">Get price</button>
-
+	How much does one coin of 
+	<%= select_tag :crypto, options_from_collection_for_select(Crypto.order(:ticker), 'ticker', 'ticker', params[:crypto]), class: "form-select" %>
+	cost in the fiat currency
+	<%= select_tag :fiat, options_from_collection_for_select(Fiat.order(:ticker), 'ticker', 'ticker', params[:fiat]), class: "form-select" %> ?
+	<button class="btn btn-primary btn-sm">Get price</button>
 <% end %>
 
 <%= render 'errors' %>
 
-<h2>1 ETH = 20</h2>
+<h4><%= @price %></h4>

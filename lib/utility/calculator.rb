@@ -4,6 +4,10 @@ class Calculator
 	COMPARISON_CRYPTO_MISSING = 'Please provide a second crypto currency to compare with'
 	BASE_CRYPTO_UNAVAILABLE = 'The base crypto currency requested is not available'
 	COMPARISON_CRYPTO_UNAVAILABLE = 'The second crypto currency requested is not available'
+	CRYPTO_MISSING = 'Please provide a crypto currency'
+	FIAT_MISSING = 'Please provide a fiat currency'
+	CRYPTO_UNAVAILABLE = 'The crypto currency requested is unavailable'
+	FIAT_UNAVAILABLE = 'The fiat currency requested is unavailable'
 
 	def self.PRICE_UNAVAILABLE(crypto)
 		"The price of #{crypto} was not available"
@@ -25,32 +29,15 @@ class Calculator
 
 		# get data for each coin
 		# must make separate requests as the API does not respect order of id inputs.
-		error, base_data = Ticker.fetch({ ids: base_crypto })
-		return error, nil if error 
+		error, base_price = price_crypto(base_crypto)
+		return error, nil if error
 
-		return PRICE_UNAVAILABLE(base_crypto), nil if invalid_price?(base_data)
-		base_price = base_data[0]['price'].to_f
-
-		error, comparison_data = Ticker.fetch({ ids: comparison_crypto })
-		return error, nil if error 
-
-		return PRICE_UNAVAILABLE(comparison_crypto), nil if invalid_price?(comparison_data)
-		comparison_price = comparison_data[0]['price'].to_f
-
+		error, comparison_price = price_crypto(comparison_crypto)
+		return error, nil if error
 
 		ratio = (base_price/comparison_price).round(6)
 
 		return nil, comparison_string_for(base_crypto, comparison_crypto, ratio)
-	end
-
-	def self.invalid_price?(data)
-		return true if data.blank?
-		price = data[0]['price'].to_f
-		return price.blank? || price.to_f == 0
-	end
-
-	def self.comparison_string_for(base_crypto, comparison_crypto, ratio)
-		"1 #{base_crypto} = #{ratio} #{comparison_crypto}"
 	end
 
 	#
@@ -60,12 +47,51 @@ class Calculator
 	#
 	# Return format is [error, string]
 	#
-	def price_of(crypto, fiat)
+	def self.price_of(crypto, fiat)
 		# validate inputs
-		# get data for each coin
-		# get exchange rates
-		# calculate price
-		# format string
+		return CRYPTO_MISSING, nil if crypto.blank?
+		return FIAT_MISSING, nil if fiat.blank?
+		return CRYPTO_UNAVAILABLE, nil if Crypto.find_by_ticker(crypto).blank?
+		return FIAT_UNAVAILABLE, nil if Fiat.find_by_ticker(fiat).blank?
+
+		# get data for crypto and exhange rates
+		error, usd_price = price_crypto(crypto)
+		return error, nil if error
+
+		error, rate = ExchangeRate.fetch(fiat)
+		return error, nil if error
+
+		local_price = (usd_price / rate).round(2)
+
+		return nil, price_string_for(crypto, fiat, local_price)
 	end
 
+	private
+
+		#
+		# Gets the price of a particular crypto currency
+		# and handles errors
+		#
+		def self.price_crypto(crypto)
+			error, crypto_data = Ticker.fetch({ ids: crypto })
+			return error, nil if error 
+
+			return PRICE_UNAVAILABLE(crypto), nil if invalid_price?(crypto_data)
+			price = crypto_data[0]['price'].to_f
+			[nil, price]
+		end
+
+		def self.invalid_price?(data)
+			return true if data.blank?
+			price = data[0]['price'].to_f
+			return price.blank? || price.to_f == 0
+		end
+
+		def self.comparison_string_for(base_crypto, comparison_crypto, ratio)
+			"1 #{base_crypto} = #{ratio} #{comparison_crypto}"
+		end
+
+		def self.price_string_for(crypto, fiat, local_price)
+			"1 #{crypto} = #{fiat} #{local_price}"
+		end
 end
